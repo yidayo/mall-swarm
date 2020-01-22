@@ -1,3 +1,3 @@
 $(function (){
-	loadTopMenu();
+	loadTopMenu();//加载顶部菜单
 });
