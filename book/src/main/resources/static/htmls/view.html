@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>view.html</title>
+	<link rel="shortcut icon" href="../img/comic.ico">
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+		.choose>div {
+			margin: 5px;
+			display: inline;
+			padding: .2em .6em .3em;
+			font-size: 80%;
+			font-weight: 700;
+			line-height: 3;
+			color: #fff;
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: baseline;
+			border-radius: .25em;
+			background-color: #777;
+		}
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+	</style>
+</head>
+	<body>
+		<!-- 顶端菜单 -->
+		<div class="navbar-wrapper">
+			<div class="container" style="padding-right: 0px;padding-left: 0px;">
+				<nav class="navbar navbar-inverse navbar-static-top">
+					<div class="container">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="welcome.html">咿哒哟</a>
+						</div>
+						<div id="navbar" class="navbar-collapse collapse">
+							<ul class="nav navbar-nav">
+								<li class="active"><a href="main.html">主页</a></li>
+								<li><a href="message.html">消息页</a></li>
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">用户<span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a href="register.html">个人主页</a></li>
+										<li><a href="#" id="logout">注销</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<div class="container">
+			<!-- 选页 -->
+			<div class="row choose" style="margin-bottom: 30px;">
+				<div class="col-md-1 col-xs-3">1</div>
+				<div class="col-md-1 col-xs-3">2</div>
+				<div class="col-md-1 col-xs-3">3</div>
+				<div class="col-md-1 col-xs-3">4</div>
+				<div class="col-md-1 col-xs-3">5</div>
+				<div class="col-md-1 col-xs-3">6</div>
+				<div class="col-md-1 col-xs-3">7</div>
+				<div class="col-md-1 col-xs-3">8</div>
+				<div class="col-md-1 col-xs-3">9</div>
+				<div class="col-md-1 col-xs-3">10</div>
+				<div class="col-md-1 col-xs-3">11</div>
+				<div class="col-md-1 col-xs-3">12</div>
+				<div class="col-md-1 col-xs-3">13</div>
+				<div class="col-md-1 col-xs-3">14</div>
+			</div>
+			<!-- 漫画 -->
+			<div class="row">
+				<div class="col-md-6 col-md-offset-1">
+					<img src="../img/2001.png">
+				</div>
+			</div>
+			<!-- 时间轴 -->
+			<div class="row">
+			</div>
+		</div>
+		<script src="../js/jquery-3.1.1.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/view.js"></script>
+	</body>
+</html>

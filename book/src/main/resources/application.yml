@@ -1,0 +1,33 @@
+spring:
+  #datasource settings
+  datasource:
+    url: jdbc:mysql://localhost:3306/book_db?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    show-sql: true
+    format_sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.DefaultComponentSafeNamingStrategy
+        
+#other settings
+bookClassify:
+  quantity: 4
+data:
+  head: static/data/head/
+  lihuiimg: static/data/lihuiimg/
+  book: static/data/book/
+  timeline: static/data/timeline/
+  lihui: static/data/lihui/
+  goodsimg: static/data/goodsimg/
+  background: static/data/background/
+  bookimg: static/data/bookimg/
