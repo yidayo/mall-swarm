@@ -1,6 +1,6 @@
 var group = ["页漫","条漫","四格多格","绘本"];
 $(function (){
-	loadTopMenu();
+	loadTopMenu("main");
 	loadMainCarousel();
 	getMostPopular();
 });

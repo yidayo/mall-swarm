@@ -67,22 +67,22 @@ function getBook() {
 	var commentNum = $.post("../../story/getBook?bookid="+bookid,function(data) {
 		//console.log(data);//书籍信息
 		$("#introduce img").attr("src","../data/bookimg/"+data.img);
-		$("#message").append('<h1 style="color: #fff;">'+data.bookname+'</h1>');
-		$("#message").append('<p>作者:</p><p></p> <p>分类:</p><p>'+group[data.groupnameid-1]+'</p> <p>收藏:</p><p>'+data.love+'</p> <p>评论:</p><p>'+data.comment+'</p>');
-		$("#message").append('<p class="lead" style="display: block;margin: 20px 0px;">'+data.introduce+'</p>');
+		$("#information").append('<h1 style="color: #fff;">'+data.bookname+'</h1>');
+		$("#information").append('<p>作者:</p><p></p> <p>分类:</p><p>'+group[data.groupnameid-1]+'</p> <p>收藏:</p><p>'+data.love+'</p> <p>评论:</p><p>'+data.comment+'</p>');
+		$("#information").append('<p class="lead" style="display: block;margin: 20px 0px;">'+data.introduce+'</p>');
 		getOtherinfo(data.userid);//获取作者信息
 		getComment(1,10,data.comment);//获取评论
 	});
 };
 function freshLove() {
-	var loveP = $("#message>p:nth-child(7)");
+	var loveP = $("#information>p:nth-child(7)");
 	var val = love?1:-1;
 	loveP.text(parseInt(loveP.text())+val);
 };
 function getOtherinfo(userid) {
 	$.post("../../story/getWriterinfo?userid="+userid,function(data) {
 		//console.log(data);//作者信息
-		$("#message>p:nth-child(3)").replaceWith('<p>'+data.username+'</p>');
+		$("#information>p:nth-child(3)").replaceWith('<p>'+data.username+'</p>');
 	});
 };
 function getComment(pageIndex,pageSize,commentNum) {//pageIndex为当前页,一页pageSize条,一共commentNum条
@@ -159,7 +159,7 @@ function newComment() {
 			}
 		};
 	});
-}
+};
 function sendComment() {
 	var fd = new FormData();
 	var comment = $("#text").val();
@@ -179,19 +179,19 @@ function sendComment() {
 			getComment(1,10,commentNum);//刷新评论列表
 		}
 	});
-}
+};
 function freshComment() {
-	var commentP = $("#message>p:nth-child(9)");
+	var commentP = $("#information>p:nth-child(9)");
 	commentP.text(parseInt(commentP.text())+1);
 	return commentP.text();
 };
 function bAppend(b,i,s,n,text) {//偷懒函数,添加标签用的
 	b.append('<a class="pages" href="javascript:getComment('+i+','+s+','+n+')">'+text+'</a>');
-}
+};
 function loseImg(img) {//图片加载失败
 	img.src="../img/errorhead.jpg";  
 	img.onerror=null;//控制不要一直跳动 
-}
+};
 function GetQueryString(name) {//地址栏获取参数
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);

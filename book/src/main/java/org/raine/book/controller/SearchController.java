@@ -1,5 +1,6 @@
 package org.raine.book.controller;
 
+import org.raine.book.dao.bean.Book;
 import org.raine.book.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ public class SearchController {
 	
 	//搜索漫画
 	@RequestMapping("/searchBook")
-	public Page<?> searchBook(String bookname,int pageIndex,int pageSize) {
+	public Page<Book> searchBook(String bookname,int pageIndex,int pageSize) {
 		return userService.searchBook(bookname,pageIndex,pageSize);
 	}
 }

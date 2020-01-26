@@ -30,7 +30,7 @@ $(function (){
 	});
 	$("#send").click(function() {//点击发送按钮
 		if(text.val()!="") {
-			$(location).attr("href","search.html?bookname="+text.val());
+			$(location).attr("href","search.html?bookname="+escape(text.val()));
 		} else {
 			$("input").focus();
 		}
@@ -38,7 +38,7 @@ $(function (){
 	$(document).keydown(function (event) {//按键盘的事件
 		if (event.keyCode == 13) {
 			if(text.val()!=""&&focus==true) {
-				$(location).attr("href","search.html?bookname="+text.val());
+				$(location).attr("href","search.html?bookname="+escape(text.val()));
 			} else {
 				$("input").focus();
 			}

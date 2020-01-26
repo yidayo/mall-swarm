@@ -3,7 +3,7 @@ var text = $("#text");
 var messagesMap = new Map();//储存消息内容的map
 var friendsMap = new Map();//储存联系人列表的arrray
 $(function (){
-	loadTopMenu(function(data){
+	loadTopMenu("message",function(data){
 		if(data.userid)//如果登陆了
 			loadMessages(data.userid);//执行下面加载消息的函数
 	});

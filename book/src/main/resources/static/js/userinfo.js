@@ -2,7 +2,7 @@ var userid = 0;
 var myid = 0;
 $(function (){
 	userid = GetQueryString("userid");
-	loadTopMenu(function(data) {
+	loadTopMenu("",function(data) {
 		myid = data.userid;//发消息用的
 	});
 	loadIntroduce();
@@ -21,7 +21,7 @@ function loadIntroduce() {
 		introduce.find("div:nth-child(2)>h1").text(data.username);
 		var idp = introduce.find("p:nth-child(2)").text("用户id:"+addZero(data.userid));
 		introduce.find("p:nth-child(3)").text(data.introduce);
-		console.log(myid);
+		//console.log(myid);//打印正在登陆的人的id
 		if(myid!=undefined&&userid!=myid) {//如果登陆了,且不是同一个人
 			receiverid = userid;//发消息用的
 			receivername = data.username;//发消息用的

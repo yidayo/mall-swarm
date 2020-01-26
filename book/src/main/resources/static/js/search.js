@@ -7,7 +7,9 @@ var bookNum = 0;//符合条件的书的总条数
 var pageNum = 1;//总页数
 $(function() {
 	bookname = GetQueryString("bookname");
+	console.log(bookname);
 	text.val(bookname);
+	newSearch();
 	loadTopMenu();
 	getBooks(pageIndex,pageSize);
 });
@@ -15,7 +17,7 @@ function getBooks(i,s) {
 	var bdiv = $("#book");
 	bdiv.empty();
 	$.post("../../search/searchBook?bookname="+bookname+"&pageIndex="+i+"&pageSize="+s,function(data) {
-		console.log(data);//书籍
+		//console.log(data);//打印搜索到的书籍
 		var di,dc=data.content;
 		pageIndex = data.number+1;//当前页
 		bookNum = data.totalElements;//符合条件书的总条数
@@ -72,6 +74,30 @@ function loadPagebox() {
 function bAppend(b,i,s,text) {//偷懒函数,添加标签用的
 	b.append('<a class="pages" href="javascript:getBooks('+i+','+s+')">'+text+'</a>');
 }
+function newSearch() {
+	$("input").focus(function(){//被选中的时候
+		focus=true;
+	});
+	$("input").blur(function(){//不再选中的时候
+		focus=false;
+	});
+	$("#send").click(function() {//点击发送按钮
+		if(text.val()!="") {
+			$(location).attr("href","search.html?bookname="+escape(text.val()));
+		} else {
+			$("input").focus();
+		}
+	});
+	$(document).keydown(function (event) {//按键盘的事件
+		if (event.keyCode == 13) {
+			if(text.val()!=""&&focus==true) {
+				$(location).attr("href","search.html?bookname="+escape(text.val()));
+			} else {
+				$("input").focus();
+			}
+		};
+	});
+};
 function GetQueryString(name) {//地址栏获取参数
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
