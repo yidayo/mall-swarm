@@ -3,83 +3,27 @@ var text=$("#text");
 var focus = false;//自己定义的临时变量,评论框是否处于选中状态
 var bookid = 0;
 var love = false;//表示用户是否收藏了
+var listCsv = null;//对话列表(talkN.csv)
 $(function (){
 	loadTopMenu();//加载顶端菜单
 	getBook();//获取书籍信息(包含获取评论列表)
 	newComment();//关于评论功能的准备工作
 	aboutlove();//关于是否收藏与添加/取消收藏的绑定工作
 });
-function aboutlove() {
-	var fd = new FormData();
-	fd.set("bookid",bookid);
-	$.ajax({
-		url: "../../story/getLove",
-		type: "POST",
-		processData: false,
-		contentType: false,
-		data: fd,
-		success: function(data) {
-			//console.log(data);//评论后返回的信息(客观未登录,表示已经收藏的1,表示未收藏的0)
-			if(data==1) {
-				love=true;
-				$("#love").attr("class","glyphicon glyphicon-heart");
-			} else if(data==0) {
-				love=false;
-			} else if(data=="客官未登录") {
-				//The quick brown fox jumps over a lazy dog.
-			}
-			else {
-				alert(data);
-			}
-		}
-	});
-	$("#love").click(function() {
-		var fd = new FormData();
-		var loveflag = love?0:1;
-		//console.log(loveflag+"~"+bookid);//收藏或者取消收藏时发送的信息
-		fd.set("loveflag",loveflag);//1添加收藏,0取消收藏
-		fd.set("bookid",bookid);
-		fd.set("display",0);//1展示,0隐藏,为了避免麻烦先默认隐藏
-		$.ajax({
-			url: "../../story/love",
-			type: "POST",
-			processData: false,
-			contentType: false,
-			data: fd,
-			success: function(data) {
-				//console.log(data);//评论后返回的信息
-				alert(data);
-				if(data=="收藏成功,默认不展示~") {
-					love=true;
-					$("#love").attr("class","glyphicon glyphicon-heart");
-					freshLove();
-				} else if(data=="已取消收藏~") {
-					love=false;
-					$("#love").attr("class","glyphicon glyphicon-heart-empty");
-					freshLove();
-				}
-			}
-		});
-	});
-};
 function getBook() {
 	bookid = GetQueryString("bookid");
 	var commentNum = $.post("../../story/getBook?bookid="+bookid,function(data) {
-		//console.log(data);//书籍信息
+		//console.log(data);//打印书籍信息
 		$("#introduce img").attr("src","../data/bookimg/"+data.img);
 		$("#information").append('<h1 style="color: #fff;">'+data.bookname+'</h1>');
 		$("#information").append('<p>作者:</p><p></p> <p>分类:</p><p>'+group[data.groupnameid-1]+'</p> <p>收藏:</p><p>'+data.love+'</p> <p>评论:</p><p>'+data.comment+'</p>');
 		$("#information").append('<p class="lead" style="display: block;margin: 20px 0px;">'+data.introduce+'</p>');
-		getOtherinfo(data.userid);//获取作者信息
+		getAuthorInfo(data.userid);//获取作者信息
+		getChooseList(0,data.chapter);//获取章节列表
 		getComment(1,10,data.comment);//获取评论
 	});
 };
-function freshLove() {
-	var loveP = $("#information>p:nth-child(7)");
-	var val = love?1:-1;
-	loveP.text(parseInt(loveP.text())+val);
-};
-function getOtherinfo(userid) {
+function getAuthorInfo(userid) {
 	$.post("../../story/getWriterinfo?userid="+userid,function(data) {
 		//console.log(data);//作者信息
 		$("#information>p:nth-child(3)").replaceWith('<p>'+data.username+'</p>');
@@ -136,6 +80,17 @@ function getComment(pageIndex,pageSize,commentNum) {//pageIndex为当前页,一�
 		$("#comment").attr("style","min-height:"+h+"px;");
 	});
 };
+function getChooseList(start,length) {//加载csv文件并添加跳转到该章节的按钮
+	$.get("../data/book/"+bookid+"/list.csv",function(data) {
+		listCsv = csvToObject(data);
+		//console.log(listCsv);//打印章节列表(list.csv)
+		var choose = $("#choose");
+		for(var i=0;i<length;i++) {
+			var c = listCsv[i];
+			choose.append('<div onclick="jump('+c.no+','+c.group+')" class="col-md-1 col-xs-3">'+c.topic+'</div>');
+		}
+	});
+};
 function newComment() {
 	$("input").focus(function(){//被选中的时候
 		focus=true;
@@ -185,6 +140,70 @@ function freshComment() {
 	commentP.text(parseInt(commentP.text())+1);
 	return commentP.text();
 };
+function aboutlove() {
+	var fd = new FormData();
+	fd.set("bookid",bookid);
+	$.ajax({
+		url: "../../story/getLove",
+		type: "POST",
+		processData: false,
+		contentType: false,
+		data: fd,
+		success: function(data) {
+			//console.log(data);//评论后返回的信息(客观未登录,表示已经收藏的1,表示未收藏的0)
+			if(data==1) {
+				love=true;
+				$("#love").attr("class","glyphicon glyphicon-heart");
+			} else if(data==0) {
+				love=false;
+			} else if(data=="客官未登录") {
+				//The quick brown fox jumps over a lazy dog.
+			}
+			else {
+				alert(data);
+			}
+		}
+	});
+	$("#love").click(function() {
+		var fd = new FormData();
+		var loveflag = love?0:1;
+		//console.log(loveflag+"~"+bookid);//收藏或者取消收藏时发送的信息
+		fd.set("loveflag",loveflag);//1添加收藏,0取消收藏
+		fd.set("bookid",bookid);
+		fd.set("display",0);//1展示,0隐藏,为了避免麻烦先默认隐藏
+		$.ajax({
+			url: "../../story/love",
+			type: "POST",
+			processData: false,
+			contentType: false,
+			data: fd,
+			success: function(data) {
+				//console.log(data);//评论后返回的信息
+				alert(data);
+				if(data=="收藏成功,默认不展示~") {
+					love=true;
+					$("#love").attr("class","glyphicon glyphicon-heart");
+					freshLove();
+				} else if(data=="已取消收藏~") {
+					love=false;
+					$("#love").attr("class","glyphicon glyphicon-heart-empty");
+					freshLove();
+				}
+			}
+		});
+	});
+};
+function freshLove() {
+	var loveP = $("#information>p:nth-child(7)");
+	var val = love?1:-1;
+	loveP.text(parseInt(loveP.text())+val);
+};
+
+function jump(no,group) {
+	if(group==1) {//1是图片,2是动态立绘
+		window.location.href="view.html?bookid="+bookid+"&chapterid="+no;
+	}
+};
 function bAppend(b,i,s,n,text) {//偷懒函数,添加标签用的
 	b.append('<a class="pages" href="javascript:getComment('+i+','+s+','+n+')">'+text+'</a>');
 };
@@ -199,4 +218,18 @@ function GetQueryString(name) {//地址栏获取参数
 };
 function toTime(nS) {//时间戳转化为时间
 	return new Date(parseInt(nS)).toLocaleString().replace(/年|月/g,"-").replace(/日/g," ");
+};
+function csvToObject(csvString) {//将csv文件转化为object
+	var csvarray = csvString.split("\r\n");
+	var datas = [];
+	var headers = csvarray[0].split(",");
+	for(var i=1;i<csvarray.length;i++) {
+		var data = {};
+		var temp = csvarray[i].split(",");
+		for(var j=0;j<temp.length;j++) {
+			data[headers[j]]=temp[j];
+		}
+		datas.push(data);
+	}
+	return datas;
 };
