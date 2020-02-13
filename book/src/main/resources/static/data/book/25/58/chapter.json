@@ -1,0 +1,13 @@
+{
+	"talkNum":15,
+	"talkCsvNum":2,
+	"talks":[
+		"talk1.csv",
+		"talk2.csv"
+	],
+	"imgNum":10,
+	"chapter":"58",
+	"chapterName":"58",
+	"groupNum":2,
+	"bookNum":25
+}

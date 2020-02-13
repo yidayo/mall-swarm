@@ -67,9 +67,9 @@ function getImg(i) {//为某一个canvas添加内容(canvas标签的id)
 		c.width = img.width;
 		c.height = img.height;
 		ci.ctx.drawImage(img,0,0);//绘图
-		for(var j=ci.min;j<=ci.max;j++) {//打字
+		for(var j=parseInt(ci.min);j<=parseInt(ci.max);j++) {//打字
 			if(j==-1) continue;//↓把下面用到的东西一股脑打印出来
-			//console.log(i,j,talkNCsv[j].px,talkNCsv[j].textName,talkNCsv[j].text,talkNCsv[j].x1,talkNCsv[j].y);
+			//console.log(i,j,talkNCsv[j].px,talkNCsv[j].textName,talkNCsv[j].text,talkNCsv[j].x1,talkNCsv[j].y1);
 			if(talkNCsv[j].size!=0) {//拆分的部分,size是每一行的字数
 				var size = parseInt(talkNCsv[j].size);
 				var old = talkNCsv[j].text;
@@ -77,6 +77,7 @@ function getImg(i) {//为某一个canvas添加内容(canvas标签的id)
 				for(var k=0;k<old.length;k+=size) {
 					talkNCsv[j].text.push(old.slice(k,k+size));
 				}
+				talkNCsv[j].size=0;
 			}
 			ci.ctx.font = ""+talkNCsv[j].px+"px "+talkNCsv[j].textName;
 			ci.ctx.textAlign = talkNCsv[j].textAlign;//左右对齐
