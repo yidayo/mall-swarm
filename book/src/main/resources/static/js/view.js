@@ -4,14 +4,19 @@ var j1=c2=c3=false;//标记json文件和两个csv文件是否加载完成
 var chapterJson = null;//配置文件(chapter.json)
 var chapterCsv = null;//图片列表(chapter.csv)(画板对象绑这上面了)
 var talkNCsv = null;//对话列表(talkN.csv)
+var bookJson = null;//本书配置文件(book.json)
 var imgDiv = $("#imgDiv");
 $(function (){
 	loadTopMenu();//加载顶部菜单
 	bookid = GetQueryString("bookid");//获取bookid
 	chapterid = parseInt(GetQueryString("chapterid"));//获取chapterid
 	//console.log(bookid,"~",chapterid);//打印bookid和chapterid
-	getSettings(bookid,chapterid);//加载配置文件(chapter.json),图片列表(chapter.csv),对话列表(talkN.csv)
-	workForNewChapter();//下一章的准备工作(如滚轮事件)
+	getSettings(bookid,chapterid);//加载配置文件(chapter.json),图片列表(chapter.csv),对话列表(talkN.csv),本书配置文件(book.json)
+	$.get("../data/book/"+bookid+"/book.json",function(data) {//加载book.json
+		bookJson = data;
+		//console.log(data);//打印book.json
+		workForNewChapter();//下一章的准备工作(如滚轮事件)
+	});
 });
 function getSettings(bookid,chapterid) {//加载json和csv文件
 	$.get("../data/book/"+bookid+"/"+chapterid+"/chapter.json",function(data) {
@@ -102,12 +107,10 @@ function workForNewChapter() {//为加载下一章所进行的工作
 		var awayBtm = $(document).height()-$(window).scrollTop()-$(window).height();
 		//https://zhidao.baidu.com/question/1736919478070059187.html
 		if(awayBtm==0) {//滑动到90%部分时
-			//$(window).unbind("scroll");
-			console.log(1);
+			if(chapterid>=bookJson.max) return;
 			chapterid += 1;//chapterid+1
 			console.log(bookid,"~",chapterid);//打印bookid和chapterid
 			getSettings(bookid,chapterid);//加载配置文件(chapter.json),图片列表(chapter.csv),对话列表(talkN.csv)
-			//workForNewChapter();//下一章的准备工作(如滚轮事件)
 		}
 	});
 };
