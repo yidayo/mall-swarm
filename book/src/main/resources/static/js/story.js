@@ -201,7 +201,7 @@ function freshLove() {
 
 function jump(no,group) {
 	if(group==1) {//1是图片,2是动态立绘
-		window.location.href="view.html?bookid="+bookid+"&chapterid="+no;
+		window.open("view.html?bookid="+bookid+"&chapterid="+no);
 	}
 };
 function bAppend(b,i,s,n,text) {//偷懒函数,添加标签用的

@@ -8,9 +8,10 @@ var imgDiv = $("#imgDiv");
 $(function (){
 	loadTopMenu();//加载顶部菜单
 	bookid = GetQueryString("bookid");//获取bookid
-	chapterid = GetQueryString("chapterid");//获取chapterid
+	chapterid = parseInt(GetQueryString("chapterid"));//获取chapterid
 	//console.log(bookid,"~",chapterid);//打印bookid和chapterid
 	getSettings(bookid,chapterid);//加载配置文件(chapter.json),图片列表(chapter.csv),对话列表(talkN.csv)
+	workForNewChapter();//下一章的准备工作(如滚轮事件)
 });
 function getSettings(bookid,chapterid) {//加载json和csv文件
 	$.get("../data/book/"+bookid+"/"+chapterid+"/chapter.json",function(data) {
@@ -40,16 +41,17 @@ function afterGetAll() {//三个配置文件加载之后
 	//console.log(chapterJson,"\n",chapterCsv,"\n",talkNCsv);//打印三个文件
 	//加载图片
 	var start=0,length=chapterJson.imgNum;
+	imgDiv.append('<div class="'+chapterid+'"></div>');
+	var chapterDiv = $("."+chapterid);
 	for(var i=start;i<start+length;i++) {
-		imgDiv.append('<canvas id="c'+i+'"></canvas>');
+		chapterDiv.append('<canvas class="c'+i+'"></canvas>');
 		getImg(i);
 	}
 };
-
 function getImg(i) {//为某一个canvas添加内容(canvas标签的id)
 	var img = new Image();
 	img.src = "../data/book/"+bookid+"/"+chapterid+"/"+i+".jpg";
-	var c = document.getElementById("c"+i);
+	var c = document.getElementsByClassName(chapterid)[0].getElementsByClassName("c"+i)[0];
 	c.onclick = function(e) {//测试时临时加的方法,用以确定文字位置
 		var eRect = this.getBoundingClientRect();//返回被点击的对象的位置集合,包含top,right,bottom,left四个属性,是表示位置的集合
 		var x = e.clientX - eRect.left;
@@ -93,6 +95,21 @@ function getImg(i) {//为某一个canvas添加内容(canvas标签的id)
 			}
 		}
 	}
+};
+
+function workForNewChapter() {//为加载下一章所进行的工作
+	$(window).scroll(function() {
+		var awayBtm = $(document).height()-$(window).scrollTop()-$(window).height();
+		//https://zhidao.baidu.com/question/1736919478070059187.html
+		if(awayBtm==0) {//滑动到90%部分时
+			//$(window).unbind("scroll");
+			console.log(1);
+			chapterid += 1;//chapterid+1
+			console.log(bookid,"~",chapterid);//打印bookid和chapterid
+			getSettings(bookid,chapterid);//加载配置文件(chapter.json),图片列表(chapter.csv),对话列表(talkN.csv)
+			//workForNewChapter();//下一章的准备工作(如滚轮事件)
+		}
+	});
 };
 function csvToObject(csvString) {//将csv文件转化为object
 	var csvarray = csvString.split("\r\n");
