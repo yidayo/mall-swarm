@@ -85,7 +85,7 @@ function getChooseList(start,length) {//加载csv文件并添加跳转到该章�
 		listCsv = csvToObject(data);
 		//console.log(listCsv);//打印章节列表(list.csv)
 		var choose = $("#choose");
-		for(var i=0;i<length;i++) {
+		for(var i=start;i<length;i++) {
 			var c = listCsv[i];
 			choose.append('<div onclick="jump('+c.no+','+c.group+')" class="col-md-1 col-xs-3">'+c.topic+'</div>');
 		}

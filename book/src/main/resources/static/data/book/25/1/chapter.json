@@ -1,0 +1,14 @@
+{
+	"talks":[
+		{
+			"no":1,
+			"name":"中文版"
+		},
+		{
+			"no":2,
+			"name":"英文版"
+		}
+	],
+	"imgNum":10,
+	"defaultTalk":2
+}
