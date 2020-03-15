@@ -1,17 +1,16 @@
 var text=$("#text");
 var focus = false;//自己定义的临时变量,表示input是否处于选中状态
 $(function (){
-	$.post("../../login/getUserinfo",
-		function(data) {
-			//console.log(data);//显示用户信息
-			if(data.userid) {//如果用户处于登录状态
-				$(".dropdown-toggle").attr("title",data.username+"的主页");
-				$(".dropdown-toggle>img").attr("src","../data/head/"+data.img);//图标设为头像
-				$(".dropdown-toggle").attr("href","../htmls/userinfo.html?userid="+data.userid);//连接设为个人主页
-				$(".dropdown-menu>li:nth-child(1)>a").attr("href","../htmls/userinfo.html?userid="+data.userid);//连接设为主页
-			} else {//如果处于非登陆状态
-				$(".dropdown").removeClass("dropdown");
-			}
+	$.post("../../login/getUserinfo",function(data) {
+		//console.log(data);//显示用户信息
+		if(data.userid) {//如果用户处于登录状态
+			$(".dropdown-toggle").attr("title",data.username+"的主页");
+			$(".dropdown-toggle>img").attr("src","../data/head/"+data.img);//图标设为头像
+			$(".dropdown-toggle").attr("href","../htmls/userinfo.html?userid="+data.userid);//连接设为个人主页
+			$(".dropdown-menu>li:nth-child(1)>a").attr("href","../htmls/userinfo.html?userid="+data.userid);//连接设为主页
+		} else {//如果处于非登陆状态
+			$(".dropdown").removeClass("dropdown");
+		}
 	});
 	$("input").focus(function(){//被选中的时候
 		focus=true;

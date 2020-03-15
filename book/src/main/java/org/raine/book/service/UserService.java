@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.raine.book.dao.bean.Book;
 import org.raine.book.dao.bean.Box;
+import org.raine.book.dao.bean.Forum;
 import org.raine.book.dao.bean.Message;
+import org.raine.book.dao.bean.Reply;
 import org.raine.book.dao.bean.User;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ public interface UserService {
 	public List<Book> getOthersLove(int userid);
 	//获取他人评论
 	public List<Object[]> getOthersComment(int userid,int pageIndex,int pageSize);
+	//删除评论(删了就是真删了)
+	public String deleteComment(HttpServletRequest request);
 	
 	//创建漫画
 	public String createBook(HttpServletRequest request);
@@ -74,4 +78,19 @@ public interface UserService {
 	public String deleteMessage(HttpServletRequest request);
 	//请求头像
 	public Map<String,Object[]> getHeadsAndUsernames(List<Integer> userid);
+	
+	//获取帖子的条数
+	public long getForumsNum();
+	//按最后回复时间排序,分页获取帖子列表
+	public Page<Forum> getForums(int pageIndex,int pageSize);
+	//发帖子
+	public String forum(HttpServletRequest request);
+	//删帖子(删了就是真删了)
+	public String deleteForum(HttpServletRequest request);
+	//分页获取回复
+	public Page<Reply> getReplys(int forumid,int pageIndex,int pageSize);
+	//发表回复
+	public String reply(HttpServletRequest request);
+	//删除回复(删了就是真删了)
+	public String deleteReply(HttpServletRequest request);
 }

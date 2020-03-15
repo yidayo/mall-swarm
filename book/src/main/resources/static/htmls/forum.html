@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>论坛</title>
+	<link rel="shortcut icon" href="../img/comic.ico">
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+		.pages {
+			color: #222;
+			margin: 0 4px;
+			font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+			line-height: 26px;
+			font-size: 12px;
+		}
+		.current {
+			color: #00a1d6;
+			font-weight: 700;
+			margin: 0 4px;
+		}
+		#comment div {
+			border-bottom: 1px solid #e5e9ef;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5 col-xs-8 col-md-offset-5 col-xs-offset-2">
+				<h1>Hello Raine</h1>
+			</div>
+		</div>
+		<div id="modal" class="col-md-1 col-xs-4 col-md-offset-8 col-xs-offset-4" style="margin-bottom:30px;margin-top:20px;">
+			<!-- 模态框或登陆按钮 -->
+		</div>
+		<div class="row">
+			<div id="page-box" class="col-md-9 col-xs-10 text-right">
+				<!-- 论坛区页码 -->
+			</div>
+		</div>
+		<div class="row">
+			<div id="comment" class="col-md-offset-2 col-xs-offset-1 col-md-7 col-xs-10">
+				<!-- 主题区 -->
+			</div>
+		</div>
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<!-- 顶端按钮和标题 -->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+						<h4 class="modal-title">喂大的铁子即将诞生=▽=(弥天大雾)</h4>
+					</div>
+					<!-- 模态框主体 -->
+					<div class="modal-body">
+						<div class="row" style="margin-bottom:20px;margin-top:20px;">
+							<div class="col-md-offset-1 col-md-10 col-xs-offset-1 col-xs-10">
+								<div class="row">
+									<input id="topic" type="text" class="form-control" placeholder="标题">
+								</div>
+								<div class="row" style="margin-top:20px;">
+									<textarea id="text" class="form-control" rows="7" placeholder="正文"></textarea>
+								</div>
+								<button id="send" type="button" class="btn btn-info pull-right" style="margin-top:10px;">发布!</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script src="../js/jquery-3.1.1.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/loadTopMenu.js"></script>
+	<script src="../js/forum.js"></script>
+</body>
+</html>

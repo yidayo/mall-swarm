@@ -17,17 +17,21 @@ import javax.servlet.http.HttpSession;
 import org.raine.book.dao.bean.Book;
 import org.raine.book.dao.bean.Box;
 import org.raine.book.dao.bean.Comment;
+import org.raine.book.dao.bean.Forum;
 import org.raine.book.dao.bean.Love;
 import org.raine.book.dao.bean.Message;
+import org.raine.book.dao.bean.Reply;
 import org.raine.book.dao.bean.User;
 import org.raine.book.dao.repo.BookRepository;
 import org.raine.book.dao.repo.BoxRepository;
 import org.raine.book.dao.repo.CommentRepository;
+import org.raine.book.dao.repo.ForumRepository;
 import org.raine.book.dao.repo.GoodsRepository;
 import org.raine.book.dao.repo.GroupnameRepository;
 import org.raine.book.dao.repo.LihuiRepository;
 import org.raine.book.dao.repo.LoveRepository;
 import org.raine.book.dao.repo.MessageRepository;
+import org.raine.book.dao.repo.ReplyRepository;
 import org.raine.book.dao.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,6 +68,10 @@ public class UserServiceImpl implements UserService {
 	MessageRepository messageRepository;//短消息
 	@Autowired
 	UserRepository userRepository;//用户
+	@Autowired
+	ForumRepository forumRepository;//论坛
+	@Autowired
+	ReplyRepository replyRepository;//回复
 	
 	//查找用户名是否重复
 	public int findByUsername(String username) {
@@ -234,6 +242,12 @@ public class UserServiceImpl implements UserService {
 		int begin = (pageIndex-1)*pageSize;
 		List<Object[]> commentList = bookRepository.getCommentByUserid(userid, begin, pageSize);
 		return commentList;
+	}
+	
+	//删除评论(删了就是真删了)
+	public String deleteComment(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	//创建新书
@@ -502,5 +516,127 @@ public class UserServiceImpl implements UserService {
 			userMiniMap.put(key, value);
 		}
 		return userMiniMap;
+	}
+
+	//获取帖子条数
+	public long getForumsNum() {
+		return forumRepository.count();
+	}
+
+	//按最后回复时间排序,分页获取帖子列表
+	public Page<Forum> getForums(int pageIndex, int pageSize) {
+		Pageable pageable = new PageRequest(pageIndex-1,pageSize);
+		return forumRepository.findByOrderByTimeDesc(pageable);
+	}
+
+	//发帖子
+	public String forum(HttpServletRequest request) {
+		Forum forum = new Forum();
+		//↓处理session中的数据
+		User user = getUserinfo(request);
+		if(user==null) {
+			return "客官未登录";
+		}
+		int userid = user.getUserid();//获取userid
+		forum.setUserid(userid);
+		//↑处理session中的数据
+		//↓处理表单中的数据
+		String topic = request.getParameter("topic");
+		forum.setTopic(topic);
+		String text = request.getParameter("text");
+		forum.setText(text);
+		forum.setComment(0);
+		forum.setTime(new Timestamp(new Date().getTime()));
+		//↑处理表单中的数据
+		//↓修改forum表
+		try {
+			forumRepository.save(forum);//保存
+		} catch (Exception e) {
+			return "帖子发表失败";
+		}
+		//↑修改forum表
+		return "帖子发表成功";
+	}
+
+	//删帖子(删了就是真删了)
+	public String deleteForum(HttpServletRequest request) {
+		//↓处理session中的数据
+		User user = getUserinfo(request);
+		if(user==null) {
+			return "客官未登录";
+		}
+		int userid = user.getUserid();//获取userid
+		//↑处理session中的数据
+		//↓处理表单中的数据
+		int forumid = Integer.parseInt(request.getParameter("forumid"));
+		//↑处理表单中的数据
+		if (forumRepository.findOne(forumid).getUserid()==userid) {//如果删除的是自己的帖子
+			replyRepository.deleteByForumid(forumid);//删除帖子的回复
+			forumRepository.delete(forumid);//删除帖子
+			return "好的,它没了";
+		} else {
+			return "你在删谁的帖子?";
+		}
+	}
+
+	//分页获取回复
+	public Page<Reply> getReplys(int forumid, int pageIndex, int pageSize) {
+		Pageable pageable = new PageRequest(pageIndex-1,pageSize);
+		return replyRepository.findByForumid(forumid, pageable);
+	}
+
+	//发表回复
+	public String reply(HttpServletRequest request) {
+		Reply reply = new Reply();
+		//↓处理session中的数据
+		User user = getUserinfo(request);
+		if(user==null) {
+			return "客官未登录";
+		}
+		int userid = user.getUserid();//获取userid
+		reply.setUserid(userid);
+		//↑处理session中的数据
+		//↓处理表单中的数据
+		int forumid = Integer.parseInt(request.getParameter("forumid"));
+		reply.setForumid(forumid);
+		String comment = request.getParameter("comment");
+		reply.setComment(comment);
+		reply.setTime(new Timestamp(new Date().getTime()));
+		//↑处理表单中的数据
+		//↓修改reply表
+		try {
+			replyRepository.save(reply);//保存
+		} catch (Exception e) {
+			return "帖子回复失败";
+		}
+		//↑修改reply表
+		//↓修改forum表
+		forumRepository.updateForumComment(1, forumid);
+		//↑修改forum表
+		return "帖子回复成功";
+	}
+
+	//删除回复(删了就是真删了)
+	public String deleteReply(HttpServletRequest request) {
+		//↓处理session中的数据
+		User user = getUserinfo(request);
+		if(user==null) {
+			return "客官未登录";
+		}
+		int userid = user.getUserid();//获取userid
+		//↑处理session中的数据
+		//↓处理表单中的数据
+		int replyid = Integer.parseInt(request.getParameter("replyid"));
+		//↑处理表单中的数据
+		Reply reply = replyRepository.findOne(replyid);
+		if(reply.getUserid()==userid) {//如果是自己的回复
+			replyRepository.delete(replyid);
+			return "好的,它没了";
+		} else if(forumRepository.findOne(reply.getForumid()).getUserid()==userid) {//如果删除的是自己帖子的回复
+			replyRepository.delete(replyid);
+			return "好的,它没了";
+		} else {
+			return "您删谁帖子呢?";
+		}
 	}
 }

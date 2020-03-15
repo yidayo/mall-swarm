@@ -202,6 +202,8 @@ function freshLove() {
 function jump(no,group) {
 	if(group==1) {//1是图片,2是动态立绘
 		window.open("view.html?bookid="+bookid+"&chapterid="+no);
+	} else if(group>1) {
+		window.open("lihui.html?bookid="+bookid+"&lihuiid="+group);
 	}
 };
 function bAppend(b,i,s,n,text) {//偷懒函数,添加标签用的
