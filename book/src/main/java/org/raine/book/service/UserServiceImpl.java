@@ -528,6 +528,11 @@ public class UserServiceImpl implements UserService {
 		Pageable pageable = new PageRequest(pageIndex-1,pageSize);
 		return forumRepository.findByOrderByTimeDesc(pageable);
 	}
+	
+	//获取某一条帖子
+	public Object[] getForum(int forumid) {
+		return forumRepository.findByForumid(forumid);
+	}
 
 	//发帖子
 	public String forum(HttpServletRequest request) {
@@ -579,10 +584,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	//获取帖子回复的条数
+	public int getForumsReplyNum(int forumid) {
+		return forumRepository.findCommentByForumid(forumid);
+	}
+	
 	//分页获取回复
-	public Page<Reply> getReplys(int forumid, int pageIndex, int pageSize) {
-		Pageable pageable = new PageRequest(pageIndex-1,pageSize);
-		return replyRepository.findByForumid(forumid, pageable);
+	public List<Object[]> getReplys(int forumid, int pageIndex, int pageSize) {
+		int begin = (pageIndex-1)*pageSize;
+		return replyRepository.findByForumid(forumid,begin,pageSize);
 	}
 
 	//发表回复

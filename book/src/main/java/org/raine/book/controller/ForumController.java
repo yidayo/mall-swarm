@@ -1,9 +1,10 @@
 package org.raine.book.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.raine.book.dao.bean.Forum;
-import org.raine.book.dao.bean.Reply;
 import org.raine.book.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,12 @@ public class ForumController {
 	@RequestMapping("/getForumsNum")
 	public long getForumsNum() {
 		return userService.getForumsNum();
+	}
+	
+	//获取帖子回复的条数
+	@RequestMapping("/getForumsReplyNum")
+	public int getForumsReplyNum(int forumid) {
+		return userService.getForumsReplyNum(forumid);
 	}
 	
 	//按最后回复时间排序,分页获取帖子列表
@@ -43,8 +50,14 @@ public class ForumController {
 	
 	//分页获取回复
 	@RequestMapping("/getReplys")
-	public Page<Reply> getReplys(int forumid,int pageIndex,int pageSize) {
+	public List<Object[]> getReplys(int forumid,int pageIndex,int pageSize) {
 		return userService.getReplys(forumid, pageIndex, pageSize);
+	}
+	
+	//获取某一条帖子
+	@RequestMapping("/getForum")
+	public Object[] getForum(int forumid) {
+		return userService.getForum(forumid);
 	}
 	
 	//发表回复

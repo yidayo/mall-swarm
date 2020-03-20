@@ -21,30 +21,33 @@
 		#comment .col-md-7 {
 			border-top: 1px solid #e5e9ef;
 		}
+		.lead {
+			min-height: 100px;
+		}
+		.head {
+			width: 80px;
+			height: 80px;
+		}
+		@media screen and (max-width:400px) {
+			.head {
+				width: 30px;
+				height: 30px;
+			}
+		}
 	</style>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-5 col-xs-8 col-md-offset-3">
-				<h1>Hello Raine</h1>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-5 col-xs-8 col-md-offset-3">
-				<input id="text" type="text" class="form-control" placeholder="Input message">
-			</div>
-			<div class="col-md-1 col-xs-4">
-				<button id="send" type="button" class="btn btn-info">Send</button>
-			</div>
-		</div>
-		<div class="row">
 			<div id="page-box" class="col-md-9 col-xs-10 text-right">
 				<!-- 论坛区页码 -->
 			</div>
 		</div>
+		<!-- 主题区 -->
+		<div id="forumBox">
+		</div>
+		<!-- 回复区 -->
 		<div id="comment">
-			<!-- 主题区 -->
 		</div>
 		<!-- 发贴框 -->
 		<div class="row" style="margin-bottom: 50px;">
@@ -60,6 +63,6 @@
 	<script src="../js/jquery-3.1.1.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/loadTopMenu.js"></script>
-	<script src="../js/forum.js"></script>
+	<script src="../js/forum_view.js"></script>
 </body>
 </html>

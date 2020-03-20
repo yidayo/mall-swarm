@@ -9,10 +9,11 @@ $(function (){
 	getBook();//获取书籍信息(包含获取评论列表)
 	newComment();//关于评论功能的准备工作
 	aboutlove();//关于是否收藏与添加/取消收藏的绑定工作
+	getTimeLine();//获取时间轴
 });
 function getBook() {
 	bookid = GetQueryString("bookid");
-	var commentNum = $.post("../../story/getBook?bookid="+bookid,function(data) {
+	$.post("../../story/getBook?bookid="+bookid,function(data) {
 		//console.log(data);//打印书籍信息
 		$("#introduce img").attr("src","../data/bookimg/"+data.img);
 		$("#information").append('<h1 style="color: #fff;">'+data.bookname+'</h1>');
@@ -197,6 +198,24 @@ function freshLove() {
 	var loveP = $("#information>p:nth-child(7)");
 	var val = love?1:-1;
 	loveP.text(parseInt(loveP.text())+val);
+};
+function getTimeLine() {
+	$.get("../data/timeline/"+bookid+".json",function(data) {
+		//console.log(data);//打印时间轴文件转化的json对象
+		var t = $("#timeline");
+		var d = data.timeline;
+		for(var i=0;i<d.length;i++) {
+			var di = d[i];
+			//console.log(di);
+			var html = '<div style="padding-left:'+di[0]+'px;min-height:30px;">'
+			if(di[3]!="")
+				html += '<a href="'+di[3]+'">'+di[1]+'</a>';
+			else
+				html += '<p>'+di[1]+'</p>';
+			html += '<p>'+di[2]+'</p></div>';
+			t.append(html);
+		}
+	});
 };
 
 function jump(no,group) {

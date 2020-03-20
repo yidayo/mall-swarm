@@ -81,7 +81,7 @@ function loadComment(pageIndex) {//每页五条
 		var di;
 		for(var i=0;i<data.length;i++) {
 			di = data[i];
-			comment.append('<div class="row"><div class="col-md-2 col-xs-4"><a href="story.html?bookid='+di[0]+'"><img src="../data/bookimg/'+di[8]+'"></a></div><div class="col-md-7 col-xs-8"><p>'+di[1]+'</p><p class="lead">'+di[11]+'</p><p>'+toTime(di[12])+'</p></div></div>');
+			comment.append('<div class="row"><div class="col-md-2 col-xs-4"><a href="story.html?bookid='+di[0]+'"><img src="../data/bookimg/'+di[9]+'"></a></div><div class="col-md-7 col-xs-8"><p>'+di[1]+'</p><p class="lead">'+di[13]+'</p><p>'+toTime(di[14])+'</p></div></div>');
 		}
 	});
 };

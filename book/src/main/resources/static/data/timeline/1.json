@@ -1,0 +1,11 @@
+{
+	"timeline":[
+		[0,"发生","事件的发生",""],
+		[50,"懒狗","有一只懒惰的狗","http://localhost:8080/htmls/view.html?bookid=25&chapterid=0"],
+		[0,"发展","事件的发展",""],
+		[50,"棕色狐狸","有只敏捷的棕色狐狸","http://localhost:8080/htmls/view.html?bookid=25&chapterid=1"],
+		[0,"高潮","事件的高潮",""],
+		[50,"跳跃","那只敏捷的棕色狐狸跳过了一只懒惰的狗","http://localhost:8080/htmls/lihui.html?bookid=8&lihuiid=2"],
+		[0,"结局","",""]
+	]
+}
